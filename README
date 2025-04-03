@@ -1,0 +1,72 @@
+Overview
+
+This is a Profile Display Web Application built using HTML, CSS, and JavaScript. The application allows users to explore profiles, view details, and 
+interact with an admin dashboard for managing profiles. It includes features like profile searching, profile management (add/edit/delete), and an interactive UI with animations.
+
+Project Structure
+
+/Project-Folder
+│── /images          # Contains profile images, icons, and backgrounds
+│── /css             # Contains CSS files for styling
+│── /js              # JavaScript files for interactivity
+│── sample.html       # Landing page (Sample Page)
+│── user.html        # User profile page
+│── admin.html       # Admin dashboard for managing users
+│── README.md        # Project documentation
+
+Features
+
+1. Sample Page (Landing Page - sample.html)
+
+A visually appealing home page.
+Navigation to User Page and Admin Page.
+Background styling and introductory animations.
+
+2. User Page (user.html)
+
+Displays a list of profiles with images, names, and aliases.
+Search Functionality: Live search option where results update dynamically as the user types.
+Interactive UI: Clicking on a profile expands details.
+Responsive Design: Works well across different screen sizes.
+
+3. Admin Dashboard (admin.html)
+
+Admin Login: Secure access for administrators.
+Profile Management:
+Add Profile: Admin can upload a profile picture and enter details.
+Edit Profile: Click on a profile to modify its details.
+Delete Profile: Admin can remove a profile with a confirmation alert.
+Dashboard Menu:
+Includes options for Edit, Add, and Delete.
+Dropdown functionality when clicking on Dashboard.
+Bubble Animation: A chat bubble on the top-left corner that dynamically changes size when typing.
+
+How to Run
+
+Clone or Download the Repository:
+git clone https://github.com/your-username/your-repository.git
+Open the Project Folder.
+Run the Application:
+Open sample.html in a web browser.
+Navigate to user.html or admin.html as needed.
+
+Technologies Used
+
+HTML5 for structuring the web pages.
+CSS3 for styling and animations.
+JavaScript (ES6) for interactivity.
+Google Maps API (optional) for location-based data.
+Font Awesome for icons.
+
+Future Enhancements
+
+User Authentication System (Login & Signup for security).
+Database Integration (Use Firebase or MySQL for real data storage).
+Profile Filtering Options (Sort by name, alias, location, etc.).
+
+Contributing
+
+Feel free to fork this repository and submit a pull request if you’d like to contribute or suggest improvements!
+
+Created by: Sandra Sajan
+📧 Contact: sandrasajanmathew@gmail.com
