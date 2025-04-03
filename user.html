@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profiles</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        h1{
+            color: aquamarine;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            background: url('./profile.jpg') no-repeat center center/cover;
+        }
+        
+        .search-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .search-input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .chat-section {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .bubble {
+            background: white;
+            padding: 5px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            white-space: nowrap;
+            display: inline-block;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ccc;
+        }
+
+        .theme-title {
+            margin-top: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+
+        .theme-title hr {
+            margin: 5px auto;
+            width: 50%;
+            border: 1px solid #ccc;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .profile img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile:hover img {
+            transform: scale(0.95);
+        }
+
+        .profile-info {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile.active .profile-info {
+            display: block;
+            animation: slide-in 0.5s forwards;
+        }
+
+        @keyframes slide-in {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .profile-info button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-section">
+        <div class="avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="bubble"><span>Hey Avengers!</span></div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search" class="search-input" placeholder="Search Avengers..." onkeyup="searchProfiles()">
+    </div>
+    
+    <div class="theme-title" style="color: aquamarine;">Team Details<hr></div>
+    
+    <div class="profile-container" id="profiles"></div>
+    
+    <div id="map"></div>
+
+    <script>
+        const avengers = [
+            {name: "Iron Man", email: "tony@stark.com", alias: "Tony Stark", location: "New York, USA", img: "https://tinyurl.com/2kexx8uw"},
+            {name: "Captain America", email: "steve@avengers.com", alias: "Steve Rogers", location: "Brooklyn, NY, USA", img: "https://tinyurl.com/2s48nwhu"},
+            {name: "Thor", email: "thor@asgard.com", alias: "God of Thunder", location: "Asgard", img: "https://tinyurl.com/5ekt37sh"},
+            {name: "Hulk", email: "bruce@banner.com", alias: "Bruce Banner", location: "Ohio, USA", img: "https://tinyurl.com/yycxec4n"}
+        ];
+
+        function displayProfiles(filteredAvengers) {
+            const profileContainer = document.getElementById("profiles");
+            profileContainer.innerHTML = "";
+            filteredAvengers.forEach(hero => {
+                const profile = document.createElement("div");
+                profile.classList.add("profile");
+                profile.innerHTML = `
+                    <img src="${hero.img}" alt="${hero.name}">
+                    <div class="profile-info">
+                        <p><strong>Name:</strong> ${hero.name}</p>
+                        <p><strong>Email:</strong> ${hero.email}</p>
+                        <p><strong>Alias:</strong> ${hero.alias}</p>
+                        <button onclick="showMap('${hero.location}')">Show Map</button>
+                    </div>
+                `;
+                profile.onclick = () => profile.classList.toggle("active");
+                profileContainer.appendChild(profile);
+            });
+        }
+
+        function searchProfiles() {
+            const query = document.getElementById("search").value.toLowerCase();
+            const filtered = avengers.filter(hero => 
+                hero.name.toLowerCase().includes(query) || 
+                hero.alias.toLowerCase().includes(query) || 
+                hero.email.toLowerCase().includes(query)
+            );
+            displayProfiles(filtered);
+        }
+
+        displayProfiles(avengers);
+    </script>
+</body>
+</html>

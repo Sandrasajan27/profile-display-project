@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Webpage</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            height: 100%;
+            background: url('./profile.jpg') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            padding-top: 20vh;
+        }
+        h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            color: skyblue;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 150px;
+            margin-top: 200px;
+            position: relative;
+            
+        }
+        .button {
+            background-color: aquamarine;
+            color: grey;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: relative;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .avatar-container {
+            position: absolute;
+            display: none;
+            flex-direction: row;
+            align-items: center;
+        }
+        .avatar-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .bubble {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black;
+            padding: 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+            animation: rise 1s ease-in-out forwards;
+            position: absolute;
+        }
+        @keyframes rise {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .left { left: -150px; }
+        .right { right: -150px; }
+        .bubble-space {
+            margin-top: 90px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        <h1>Personal Information at a Glance</h1>
+        
+        <div class="button-container">
+            <div style="position: relative;">
+                <a href="user.html">
+                <button class="button"  onmouseover="showAvatar('user')" onmouseleave="hideAvatar('user')">User</button></a>
+                <div id="user-avatar" class="avatar-container" style="left: -100px;">
+                    <!-- Avatar Image -->
+                    <img src="C:\Users\HP\Downloads\detective.jpeg" alt="User Avatar" class="avatar-image"/>
+                    <div id="user-bubble1" class="bubble left">Are you sure?</div>
+                    <div id="user-bubble2" class="bubble left bubble-space">Click on User button</div>
+                </div>
+            </div>
+            <div style="position: relative;">
+              <a href="admin.html"><button class="button" onmouseover="showAvatar('admin')" onmouseleave="hideAvatar('admin')">Admin</button></a>
+                <div id="admin-avatar" class="avatar-container" style="right: -100px;">
+                    <!-- Avatar Image -->
+                    <img src="C:\Users\HP\Downloads\detective.jpeg" alt="Admin Avatar" class="avatar-image"/>
+                    <div id="admin-bubble1" class="bubble right">Are you sure?</div>
+                    <div id="admin-bubble2" class="bubble right bubble-space">Click on Admin button</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAvatar(role) {
+            let avatar = document.getElementById(role + '-avatar');
+            let bubble1 = document.getElementById(role + '-bubble1');
+            let bubble2 = document.getElementById(role + '-bubble2');
+            avatar.style.display = 'flex';
+            bubble1.style.display = 'block';
+            bubble2.style.display = 'none';
+            setTimeout(() => {
+                bubble2.style.display = 'block';
+            }, 1500); // Adjust the delay here if needed
+        }
+
+        function hideAvatar(role) {
+            let avatar = document.getElementById(role + '-avatar');
+            avatar.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

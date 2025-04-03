@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&callback=initMap" async defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            background: url('./profile.jpg') no-repeat center center/cover;
+            color: aquamarine;
+        }
+        
+        .chat-section {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .bubble {
+            background: white;
+            padding: 5px;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            white-space: nowrap;
+            display: inline-block;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ccc;
+            animation: bubbleTyping 2s infinite alternate;
+        }
+
+        @keyframes bubbleTyping {
+            0% { width: 10px; }
+            100% { width: 50px; }
+        }
+
+        .dashboard {
+            position: absolute;
+            left: 10px;
+            top: 60px;
+            background: grey;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dashboard-menu {
+            display: none;
+            background: white;
+            position: absolute;
+            padding: 10px;
+            top: 30px;
+            left: 0;
+            width: 120px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        
+        .dashboard:hover .dashboard-menu {
+            display: block;
+        }
+        
+        .dashboard-menu button {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        
+        .theme-title {
+            margin-top: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile:hover img {
+            transform: scale(0.95);
+        }
+        
+        .profile.active .profile-info {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-section">
+        <div class="avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="bubble"><span>HEY!!!</span></div>
+    </div>
+    
+    <div class="dashboard">
+        Dashboard
+        <div class="dashboard-menu">
+            <button onclick="toggleEdit()">Edit</button>
+            <button onclick="addProfile()">Add</button>
+            <button onclick="deleteProfile()">Delete</button>
+        </div>
+    </div>
+    
+    <div class="theme-title">Welcome Admin<hr></div>
+    <div class="profile-container" id="profiles"></div>
+
+    <script>
+        let profiles = [
+        {name: "Iron Man", email: "tony@stark.com", alias: "Tony Stark", loc: "New York, USA", img: "https://tinyurl.com/2kexx8uw"},
+        {name: "Captain America", email: "steve@avengers.com", alias: "Steve Rogers", loc: "Brooklyn, NY, USA", img: "https://tinyurl.com/2s48nwhu"},
+        {name: "Thor", email: "thor@asgard.com", alias: "God of Thunder", loc: "Asgard", img: "https://tinyurl.com/5ekt37sh"},
+        {name: "Hulk", email: "bruce@banner.com", alias: "Bruce Banner", loc: "Ohio, USA", img: "https://tinyurl.com/yycxec4n"}
+        
+        ];
+        
+        function renderProfiles() {
+            const profileContainer = document.getElementById("profiles");
+            profileContainer.innerHTML = "";
+            profiles.forEach((hero, index) => {
+                const profile = document.createElement("div");
+                profile.classList.add("profile");
+                profile.innerHTML = `
+                    <img src="${hero.img}" alt="${hero.name}">
+                    <div class="profile-info">
+                        <p><strong>Name:</strong> ${hero.name}</p>
+                        <p><strong>Alias:</strong> ${hero.alias}</p>
+                        <p><strong>email:</strong> ${hero.email}</p>
+                        <p><strong>location:</strong> ${hero.loc}</p>
+                    </div>
+                `;
+                profile.onclick = () => editProfile(index);
+                profileContainer.appendChild(profile);
+            });
+        }
+
+        function editProfile(index) {
+            let newName = prompt("Edit Name:", profiles[index].name);
+            if (newName) {
+                profiles[index].name = newName;
+                renderProfiles();
+            }
+        }
+
+        function addProfile() {
+            let name = prompt("Enter Name:");
+            let alias = prompt("Enter Alias:");
+            let img = prompt("Enter Image URL:");
+            let loc=prompt("enter address:");
+            let email=prompt("enter email:");
+            if (name && alias && img) {
+                profiles.push({name, alias, img});
+                renderProfiles();
+            }
+        }
+
+        function deleteProfile() {
+            let name = prompt("Enter name to delete:");
+            profiles = profiles.filter(hero => hero.name !== name);
+            renderProfiles();
+        }
+
+        renderProfiles();
+    </script>
+</body>
+</html>
